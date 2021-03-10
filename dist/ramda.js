@@ -7,11 +7,11 @@ const retry = (func, wait = 0, options) => {
         console.log('iteration : ', iteration, 'result : ', result);
         if (options && options.max === iteration) {
             clearInterval(myInterval);
-            console.log('stopped by interval');
+            console.log('stopped, because max iteration is ', iteration);
         }
-        if (result) {
+        else if (result) {
             clearInterval(myInterval);
-            console.log('stopped by result value');
+            console.log('stopped, because result value is true');
         }
     }, wait);
 };
