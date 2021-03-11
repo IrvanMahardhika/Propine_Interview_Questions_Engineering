@@ -1,12 +1,12 @@
 import express from 'express';
 import {
-  getAllTransactionRouter,
-  getLatestPortofolioPerTokenRouter,
+  getAllPortofolioRouter,
+  getSpecificPortofolioRouter,
 } from './get.transaction';
 
 const router = express.Router();
 
-router.use(getAllTransactionRouter);
-router.use(getLatestPortofolioPerTokenRouter);
+router.use(getAllPortofolioRouter);
+router.use(getSpecificPortofolioRouter);
 
 export default router;

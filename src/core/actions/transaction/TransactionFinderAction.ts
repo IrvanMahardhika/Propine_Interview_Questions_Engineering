@@ -105,4 +105,66 @@ export default class TransactionFinderAction {
       throw error;
     }
   }
+
+  async getLatestPortofolioOfOneToken(
+    requestedToken: any,
+  ): Promise<ReturnValue<Transaction[]>> {
+    try {
+      const tokens = await this.transactionRepo.findAll({
+        attributes: ['token'],
+        group: ['token'],
+      });
+      const arrayOfToken = tokens.map((token) => token.token);
+      const tokenUSDRates = await this.getCryptoUSDRates(arrayOfToken);
+
+      const latestTimestampPerToken = await this.transactionRepo.findAll({
+        attributes: ['token', [fn('MAX', col('timestamp')), 'timestamp']],
+        group: ['token'],
+      });
+
+      const latestPortofolioPerToken = [];
+      const latestTimestampPerTokenArrayLength = latestTimestampPerToken.length;
+      for (let i = 0; i < latestTimestampPerTokenArrayLength; i += 1) {
+        const { token, timestamp } = latestTimestampPerToken[i];
+        // eslint-disable-next-line no-await-in-loop
+        const amountForLatestPortofolioPerToken = await this.transactionRepo.findOne(
+          {
+            where: { token, timestamp },
+          },
+        );
+        latestPortofolioPerToken.push(amountForLatestPortofolioPerToken);
+      }
+
+      const latestPortofolioPerTokenInUSD = latestPortofolioPerToken.map(
+        (transaction) => {
+          const { timestamp, token, amount, transaction_type } = transaction;
+          const USDConverter = tokenUSDRates[token].USD;
+          return {
+            token,
+            amount,
+            transaction_date: moment(timestamp * 1000).format(
+              'DD-MM-YYYY h:mm:ss',
+            ),
+            transaction_type,
+            USDRates: USDConverter,
+            amountInUSD: Math.round(amount * USDConverter),
+          };
+        },
+      );
+
+      return {
+        status: 'SUCCESS',
+        message: `latest portofolio value for token ${requestedToken}`,
+        data: latestPortofolioPerTokenInUSD.filter(
+          (portofolio) => portofolio.token === requestedToken,
+        ),
+      };
+    } catch (error) {
+      if (instanceOfReturnValue(error)) {
+        return error;
+      }
+
+      throw error;
+    }
+  }
 }
