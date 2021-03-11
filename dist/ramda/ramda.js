@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const retry = (func, wait = 0, options) => {
     let result;
     let iteration = 0;
@@ -15,4 +17,5 @@ const retry = (func, wait = 0, options) => {
         }
     }, wait);
 };
-export default { retry };
+exports.default = { retry };
+//# sourceMappingURL=ramda.js.map

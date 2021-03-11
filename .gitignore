@@ -1,0 +1,11 @@
+# dependencies
+node_modules
+
+#files
+sequelize-data.json
+
+# misc
+.env
+/.vscode
+.vscode/settings.json
+/package-lock.json

@@ -2,11 +2,68 @@
   "name": "propine_interview_questions_engineering",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest test",
+    "prestart": "npm run build",
+    "start": "node dist",
+    "dev": "nodemon",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "clean-build": "rm -rf dist/* && npm run build",
+    "build": "tsc --noEmit && babel src -s -D -d dist --extensions .ts,.js --source-maps inline"
   },
   "author": "IrvanMahardhika",
   "license": "ISC",
-  "type": "module"
+  "devDependencies": {
+    "@babel/cli": "^7.13.0",
+    "@babel/core": "^7.13.8",
+    "@babel/node": "^7.13.0",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/preset-env": "^7.13.8",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/body-parser": "^1.19.0",
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.11",
+    "@typescript-eslint/eslint-plugin": "^4.15.2",
+    "@typescript-eslint/parser": "^4.15.2",
+    "babel-plugin-root-import": "^6.6.0",
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.2",
+    "typescript": "^4.2.2"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "module-alias": "^2.2.2",
+    "moment": "^2.29.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.5.0",
+    "sequelize-cli": "^6.2.0"
+  },
+  "_moduleAliases": {
+    "@core": "dist/core",
+    "@infras": "dist/infras",
+    "@utils": "dist/utils"
+  },
+  "jest": {
+    "verbose": true,
+    "moduleNameMapper": {
+      "^@core(.*)$": "<rootDir>/src/core$1",
+      "^@infras(.*)$": "<rootDir>/src/infras$1",
+      "^@utils(.*)$": "<rootDir>/src/utils$1",
+      "^@mock(.*)$": "<rootDir>/test/__mocks__$1"
+    }
+  }
 }

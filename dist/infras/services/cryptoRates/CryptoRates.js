@@ -12,15 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("module-alias/register");
-const app_1 = __importDefault(require("./app"));
-const db_1 = __importDefault(require("./db"));
-/**
- * Function to wrap all script that running on startup
- */
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    const app = new app_1.default();
-    app.initialize();
-    yield db_1.default.initialize();
-}))();
-//# sourceMappingURL=index.js.map
+const axios_1 = __importDefault(require("axios"));
+class CryptoRates {
+    rateInUSD(tokens) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const options = {
+                headers: {
+                    authorization: process.env.CRYPTO_COMPARE_API_KEY,
+                },
+            };
+            const tokensString = tokens.join(',');
+            const { data } = yield axios_1.default.get(`https://min-api.cryptocompare.com/data/pricemulti?fsyms=${tokensString}&tsyms=USD`, options);
+            return data;
+        });
+    }
+}
+exports.default = CryptoRates;
+//# sourceMappingURL=CryptoRates.js.map

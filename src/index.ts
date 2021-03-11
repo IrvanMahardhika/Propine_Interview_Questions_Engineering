@@ -1,7 +1,14 @@
-import R from './ramda.js';
+import 'module-alias/register';
+import App from './app';
+import DB from './db';
 
-let f = () => {
-  let d = new Date(); // current time
-  return d.getMilliseconds() % 2 == 0; // => true or false
-};
-R.retry(f, 1000, { max: 2 });
+/**
+ * Function to wrap all script that running on startup
+ */
+
+(async () => {
+  const app = new App();
+  app.initialize();
+
+  await DB.initialize();
+})();

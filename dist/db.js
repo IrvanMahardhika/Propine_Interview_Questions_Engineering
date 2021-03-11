@@ -12,15 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("module-alias/register");
-const app_1 = __importDefault(require("./app"));
-const db_1 = __importDefault(require("./db"));
-/**
- * Function to wrap all script that running on startup
- */
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    const app = new app_1.default();
-    app.initialize();
-    yield db_1.default.initialize();
-}))();
-//# sourceMappingURL=index.js.map
+const sequelize_1 = __importDefault(require("@infras/database/sequelize"));
+const models_1 = require("./models");
+class DB {
+    static initialize() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield models_1.sequelize.authenticate({ logging: false });
+                sequelize_1.default.setSequelizeInstance(models_1.sequelize);
+                yield sequelize_1.default.initialize();
+                console.log('Connection to DB has been established successfully.');
+            }
+            catch (error) {
+                console.log('Unable to connect to the database:', error);
+            }
+        });
+    }
+}
+exports.default = DB;
+//# sourceMappingURL=db.js.map

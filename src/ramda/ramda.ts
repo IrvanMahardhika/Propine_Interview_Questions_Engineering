@@ -2,7 +2,7 @@ type Options = {
   max: number;
 };
 
-const retry = (func: Function, wait = 0, options?: Options) => {
+const retry = (func, wait = 0, options?: Options) => {
   let result: boolean;
   let iteration = 0;
   const myInterval = setInterval(() => {

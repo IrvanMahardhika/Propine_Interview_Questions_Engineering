@@ -1,0 +1,7 @@
+{
+    "watch": ["src"],
+    "ext": "ts,js",
+    "ignore": ["src/**/*.spec.ts", "dist", "node_modules"],
+    "exec": "babel-node -r dotenv/config src/index.ts --extensions .ts,.js"
+  }
+  
