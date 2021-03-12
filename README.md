@@ -67,7 +67,7 @@ R.retry(f, 1000, { max: 2 })
 ``` 
 function :
 1. Change it in "src/ramda/index.ts", 
-2. Run "tsc" in project root directory terminal.
-3. Run "node dist/ramda/index.js" in project root directory terminal.
+2. Run ```tsc``` in project root directory terminal.
+3. Run ```node dist/ramda/index.js``` in project root directory terminal.
 
 
