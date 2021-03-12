@@ -5,39 +5,7 @@ import express, { Request, Response, NextFunction } from 'express';
 
 const router = express.Router();
 
-const getAllPortofolioController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const action = new TransactionFinderAction(
-      {
-        transactionRepo: new TransactionRepositories(),
-      },
-      {
-        cryptoRates: new CryptoRates(),
-      },
-    );
-
-    const { status, message, data } = await action.getAllTransaction();
-
-    if (status === 'SUCCESS') {
-      res.status(200).send({
-        message,
-        data,
-      });
-      return;
-    }
-    res.status(400).send({
-      message,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getSpecificPortofolioController = async (
+const getPortofolioValueController = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -56,13 +24,31 @@ const getSpecificPortofolioController = async (
 
     let resultGetData;
     switch (true) {
-      // if there is token and date is not provided, then getLatestPortofolioPerToken
+      // if token and date is not provided, then getLatestPortofolioValuePerToken
       case !token && !date: {
-        resultGetData = await action.getLatestPortofolioPerToken();
+        resultGetData = await action.getLatestPortofolioValuePerToken();
         break;
       }
+      // if token is provided but date is not, then getLatestPortofolioValueForAToken
       case token && !date: {
-        resultGetData = await action.getLatestPortofolioOfOneToken(token);
+        resultGetData = await action.getLatestPortofolioValueForAToken(
+          String(token).toUpperCase(),
+        );
+        break;
+      }
+      // if date is provided but token is not, then getPortofolioValueForADatePerToken
+      case date && !token: {
+        resultGetData = await action.getPortofolioValueForADatePerToken(
+          String(date),
+        );
+        break;
+      }
+      // if token and date is provided, then getPortofolioValueForADatePerToken
+      case !!date && !!token: {
+        resultGetData = await action.getPortofolioValueForADateForAToken(
+          String(token).toUpperCase(),
+          String(date),
+        );
         break;
       }
       default: {
@@ -87,12 +73,7 @@ const getSpecificPortofolioController = async (
   }
 };
 
-export const getAllPortofolioRouter = router.get(
-  '/all',
-  getAllPortofolioController,
-);
-
-export const getSpecificPortofolioRouter = router.get(
+export const getPortofolioValueRouter = router.get(
   '/',
-  getSpecificPortofolioController,
+  getPortofolioValueController,
 );

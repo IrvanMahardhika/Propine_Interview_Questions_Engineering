@@ -5,9 +5,9 @@ export default class Transaction implements ITransaction {
 
   timestamp?: number;
 
-  transaction_type: string;
+  transaction_type?: string;
 
-  token: string;
+  token?: string;
 
-  amount: number;
+  amount?: number;
 }
