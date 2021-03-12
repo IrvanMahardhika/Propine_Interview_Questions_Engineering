@@ -180,6 +180,20 @@ export default class TransactionFinderAction {
         new Date(formattedRequestedDate).getTime() / 1000 + 86400,
       );
 
+      // check the requestedDate format
+      if (
+        // eslint-disable-next-line no-restricted-globals
+        isNaN(beginningDateTimestampRange) ||
+        // eslint-disable-next-line no-restricted-globals
+        isNaN(endingDateTimestampRange)
+      ) {
+        return {
+          status: 'INVALID',
+          message: `format date has to be dd-mm-yyyy`,
+          data: [],
+        };
+      }
+
       // check the requestedDate
       const checkDateForTheTokenResult = await this.transactionRepo.findAll({
         where: {
@@ -299,6 +313,20 @@ export default class TransactionFinderAction {
       const endingDateTimestampRange = Math.floor(
         new Date(formattedRequestedDate).getTime() / 1000 + 86400,
       );
+
+      // check the requestedDate format
+      if (
+        // eslint-disable-next-line no-restricted-globals
+        isNaN(beginningDateTimestampRange) ||
+        // eslint-disable-next-line no-restricted-globals
+        isNaN(endingDateTimestampRange)
+      ) {
+        return {
+          status: 'INVALID',
+          message: `format date has to be dd-mm-yyyy`,
+          data: {},
+        };
+      }
 
       // check the requestedDate for the requestedToken
       const checkDateForTheTokenResult = await this.transactionRepo.findAll({
